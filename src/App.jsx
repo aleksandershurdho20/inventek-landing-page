@@ -190,10 +190,10 @@ const AIMSAlbanianLandingPage = () => {
       `}
       >
         <div className="flex flex-col items-center justify-center h-full space-y-8 text-center">
-          <XIcon
+          {/* <XIcon
             onClick={() => setMobileMenuOpen(false)}
             className="absolute top-6 right-6 w-10 h-10 text-cyan-400 cursor-pointer hover:rotate-90 transition"
-          />
+          /> */}
           <a
             href="#home"
             onClick={() => setMobileMenuOpen(false)}
@@ -270,11 +270,18 @@ Kryefaqja          </a>
               Kontakto
             </a>
           </div>
+          
           <div className="md:hidden">
+            {mobileMenuOpen ? <XIcon
+            onClick={() => setMobileMenuOpen(false)}
+            className="absolute top-6 right-6 w-10 h-10 text-cyan-400 cursor-pointer hover:rotate-90 transition"
+          />
+            :
             <MenuIcon
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="w-8 h-8 text-cyan-400 cursor-pointer"
             />
+          }
           </div>
         </div>
       </nav>
