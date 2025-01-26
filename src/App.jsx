@@ -411,8 +411,10 @@ Kryefaqja          </a>
                     type="text"
                     id="name"
                     value={contactForm.name}
-                    onChange={(e) =>
+                    onChange={(e) =>{
                       setContactForm({ ...contactForm, name: e.target.value })
+                      setFormErrors({...formErrors,name:""})
+                    }
                     }
                     className={`
                 w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl
@@ -440,8 +442,11 @@ Kryefaqja          </a>
                     type="email"
                     id="email"
                     value={contactForm.email}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setContactForm({ ...contactForm, email: e.target.value })
+                      setFormErrors({...formErrors,email:""})
+
+                    }
                     }
                     className={`
                 w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl
@@ -472,8 +477,11 @@ Kryefaqja          </a>
                   type="text"
                   id="company"
                   value={contactForm.company}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setContactForm({ ...contactForm, company: e.target.value })
+                    setFormErrors({...formErrors,company:""})
+
+                  }
                   }
                   className="
               w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl
@@ -495,8 +503,11 @@ Kryefaqja          </a>
                 <textarea
                   id="message"
                   value={contactForm.message}
-                  onChange={(e) =>
+                  onChange={(e) => {
                     setContactForm({ ...contactForm, message: e.target.value })
+                    setFormErrors({...formErrors,message:""})
+
+                  }
                   }
                   className={`
               w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl h-36
