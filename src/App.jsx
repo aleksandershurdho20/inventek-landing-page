@@ -19,6 +19,9 @@ import {
   StarIcon,
   MenuIcon,
   XIcon,
+  SquareMenu,
+  WandSparkles,
+  Sparkle
 } from "lucide-react";
 import {
   Menu,
@@ -45,6 +48,7 @@ const AIMSAlbanianLandingPage = () => {
   const featuresRef = useRef(null);
   const [formErrors, setFormErrors] = useState({});
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loading, setLoading] = useState(false); // Add loading state
 
   useEffect(() => {
     const handleScroll = () => {
@@ -99,17 +103,15 @@ const AIMSAlbanianLandingPage = () => {
     // Clear errors
     setFormErrors({});
 
+    // Set loading to true
+    setLoading(true);
+
     // Send email via EmailJS
     emailjs
       .send(
         "service_oa5qx0t", // Replace with your EmailJS Service ID
         "template_paa4kxa", // Replace with your EmailJS Template ID
         {
-          // user_name: contactForm.name,
-          // user_email: contactForm.email,
-          // user_company: contactForm.company,
-          // message: contactForm.message,
-
           name: contactForm.name,
           to_name: "Inventek",
           from_name: contactForm.name,
@@ -132,8 +134,15 @@ const AIMSAlbanianLandingPage = () => {
           );
           console.error("EmailJS error:", error);
         }
-      );
+      )
+      .finally(() => {
+        // Set loading to false after 2 seconds
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
+      });
   };
+
   const testimonials = [
     {
       quote:
@@ -150,10 +159,13 @@ const AIMSAlbanianLandingPage = () => {
   ];
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white min-h-screen overflow-x-hidden">
+    <div
+      className="bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white min-h-screen overflow-x-hidden"
+      id="home"
+    >
       {/* Navigation with Glassmorphism */}
       {/* <nav className={`
-        fixed top-0 left-0 right-0 z-50 
+        fixed top-0 left-0 right-0 z-50
         ${scrolled ? 'bg-gray-900/50 backdrop-blur-xl shadow-2xl' : 'bg-transparent'}
         transition-all duration-300
       `}>
@@ -173,7 +185,7 @@ const AIMSAlbanianLandingPage = () => {
       </nav> */}
       <div
         className={`
-        fixed inset-0 z-40 bg-gray-900/95 backdrop-blur-xl 
+        fixed inset-0 z-40 bg-gray-900/95 backdrop-blur-xl
         ${mobileMenuOpen ? "block" : "hidden"}
       `}
       >
@@ -183,6 +195,12 @@ const AIMSAlbanianLandingPage = () => {
             className="absolute top-6 right-6 w-10 h-10 text-cyan-400 cursor-pointer hover:rotate-90 transition"
           />
           <a
+            href="#home"
+            onClick={() => setMobileMenuOpen(false)}
+            className="text-3xl font-bold hover:text-cyan-400 transition"
+          >
+Kryefaqja          </a>
+          <a
             href="#features"
             onClick={() => setMobileMenuOpen(false)}
             className="text-3xl font-bold hover:text-cyan-400 transition"
@@ -190,12 +208,13 @@ const AIMSAlbanianLandingPage = () => {
             Veçoritë
           </a>
           <a
-            href="#solutions"
+            href="#clients"
             onClick={() => setMobileMenuOpen(false)}
             className="text-3xl font-bold hover:text-cyan-400 transition"
           >
-            Zgjidhjet
+            Cfare thone klientet
           </a>
+
           <a
             href="#contact"
             onClick={() => setMobileMenuOpen(false)}
@@ -209,7 +228,7 @@ const AIMSAlbanianLandingPage = () => {
       {/* Navigation with Glassmorphism */}
       <nav
         className={`
-        fixed top-0 left-0 right-0 z-50 
+        fixed top-0 left-0 right-0 z-50
         ${
           scrolled
             ? "bg-gray-900/50 backdrop-blur-xl shadow-2xl"
@@ -220,12 +239,18 @@ const AIMSAlbanianLandingPage = () => {
       >
         <div className="container mx-auto flex justify-between items-center p-4">
           <div className="flex items-center space-x-3">
-            <CloudIcon className="w-10 h-10 text-cyan-400" />
+            <Sparkle className="w-10 h-10 text-cyan-400" />
             <span className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
               InvenTek
             </span>
           </div>
           <div className="hidden md:flex space-x-6 items-center">
+            <a
+              href="#home"
+              className="hover:text-cyan-300 transition text-gray-200 font-medium"
+            >
+              Kryefaqja
+            </a>
             <a
               href="#features"
               className="hover:text-cyan-300 transition text-gray-200 font-medium"
@@ -233,10 +258,10 @@ const AIMSAlbanianLandingPage = () => {
               Veçoritë
             </a>
             <a
-              href="#solutions"
+              href="#clients"
               className="hover:text-cyan-300 transition text-gray-200 font-medium"
             >
-              Zgjidhjet
+              Cfare thone klientet
             </a>
             <a
               href="#contact"
@@ -247,7 +272,7 @@ const AIMSAlbanianLandingPage = () => {
           </div>
           <div className="md:hidden">
             <MenuIcon
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="w-8 h-8 text-cyan-400 cursor-pointer"
             />
           </div>
@@ -298,7 +323,7 @@ const AIMSAlbanianLandingPage = () => {
         </h2>
         <div
           className={`
-          grid md:grid-cols-3 gap-8 transition-all duration-1000 
+          grid md:grid-cols-3 gap-8 transition-all duration-1000
           ${
             animateFeatures
               ? "opacity-100 translate-y-0"
@@ -312,7 +337,7 @@ const AIMSAlbanianLandingPage = () => {
               onMouseEnter={() => setActiveFeature(index)}
               onMouseLeave={() => setActiveFeature(null)}
               className={`
-                bg-gray-800/50 backdrop-blur-xl p-8 rounded-2xl transition-all duration-300 
+                bg-gray-800/50 backdrop-blur-xl p-8 rounded-2xl transition-all duration-300
                 ${
                   activeFeature === index
                     ? "scale-105 shadow-2xl border-2 border-cyan-400"
@@ -330,7 +355,7 @@ const AIMSAlbanianLandingPage = () => {
           ))}
         </div>
       </section>
-      <section className="container mx-auto py-24 px-4">
+      <section className="container mx-auto py-24 px-4" id="clients">
         <h2 className="text-4xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
           Çfarë Thonë Klientët
         </h2>
@@ -383,7 +408,7 @@ const AIMSAlbanianLandingPage = () => {
                       setContactForm({ ...contactForm, name: e.target.value })
                     }
                     className={`
-                w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl 
+                w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl
                 focus:outline-none focus:ring-2 focus:ring-cyan-400
                 ${formErrors.name ? "border-2 border-red-500" : ""}
               `}
@@ -412,7 +437,7 @@ const AIMSAlbanianLandingPage = () => {
                       setContactForm({ ...contactForm, email: e.target.value })
                     }
                     className={`
-                w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl 
+                w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl
                 focus:outline-none focus:ring-2 focus:ring-cyan-400
                 ${formErrors.email ? "border-2 border-red-500" : ""}
               `}
@@ -444,7 +469,7 @@ const AIMSAlbanianLandingPage = () => {
                     setContactForm({ ...contactForm, company: e.target.value })
                   }
                   className="
-              w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl 
+              w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl
               focus:outline-none focus:ring-2 focus:ring-cyan-400
             "
                   placeholder="Emri i kompanisë"
@@ -467,7 +492,7 @@ const AIMSAlbanianLandingPage = () => {
                     setContactForm({ ...contactForm, message: e.target.value })
                   }
                   className={`
-              w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl h-36 
+              w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl h-36
               focus:outline-none focus:ring-2 focus:ring-cyan-400
               ${formErrors.message ? "border-2 border-red-500" : ""}
             `}
@@ -485,15 +510,16 @@ const AIMSAlbanianLandingPage = () => {
             <button
               type="submit"
               className="
-          w-full bg-gradient-to-r from-cyan-600 to-blue-700 
-          hover:from-cyan-700 hover:to-blue-800 
-          px-7 py-4 rounded-full text-white font-bold 
+          w-full bg-gradient-to-r from-cyan-600 to-blue-700
+          hover:from-cyan-700 hover:to-blue-800
+          px-7 py-4 rounded-full text-white font-bold
           transition transform hover:scale-105 shadow-2xl
           flex items-center justify-center space-x-3
         "
+              disabled={loading}
             >
               <SendIcon className="w-5 h-5" />
-              <span>Dërgo Mesazhin</span>
+              {loading ? "Duke u dërguar..." : "Dërgo Mesazhin"}
             </button>
           </form>
         </div>
