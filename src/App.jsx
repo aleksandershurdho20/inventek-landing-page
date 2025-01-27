@@ -21,7 +21,7 @@ import {
   XIcon,
   SquareMenu,
   WandSparkles,
-  Sparkle
+  Sparkle,
 } from "lucide-react";
 import {
   Menu,
@@ -58,6 +58,33 @@ const AIMSAlbanianLandingPage = () => {
         const rect = featuresRef.current.getBoundingClientRect();
         const isVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
         setAnimateFeatures(isVisible);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  const [visibleSteps, setVisibleSteps] = useState([]);
+  const howItWorksRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+
+      if (featuresRef.current) {
+        const rect = featuresRef.current.getBoundingClientRect();
+        const isVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
+        setAnimateFeatures(isVisible);
+      }
+
+      if (howItWorksRef.current) {
+        const steps = howItWorksRef.current.querySelectorAll(".step-card");
+        steps.forEach((step, index) => {
+          const rect = step.getBoundingClientRect();
+          if (rect.top <= window.innerHeight * 0.8) {
+            setVisibleSteps((prev) => Array.from(new Set([...prev, index])));
+          }
+        });
       }
     };
 
@@ -158,6 +185,32 @@ const AIMSAlbanianLandingPage = () => {
     },
   ];
 
+  const howItWorks = [
+    {
+      icon: <RadarIcon className="w-10 h-10 text-teal-400" />,
+      title: "Vendosja e Sensorëve",
+      description:
+        "Sensorët inteligjentë vendosen në pikat strategjike për të mbledhur të dhëna në kohë reale për inventarin tuaj.",
+    },
+    {
+      icon: <LayoutGridIcon className="w-10 h-10 text-teal-400" />,
+      title: "Mbledhja e të Dhënave",
+      description:
+        "Sistemi ynë mbledh dhe përpunon të dhënat në mënyrë të vazhdueshme, duke ofruar informacion të saktë për gjendjen e inventarit.",
+    },
+    {
+      icon: <BotIcon className="w-10 h-10 text-teal-400" />,
+      title: "Analiza Inteligjente",
+      description:
+        "Algoritmet tona të AI analizojnë të dhënat për të identifikuar trendet dhe për të ofruar parashikime të sakta.",
+    },
+    {
+      icon: <WandSparkles className="w-10 h-10 text-teal-400" />,
+      title: "Optimizim Automatik",
+      description:
+        "Bazuar në analizat, sistemi sugjeron veprime për optimizimin e inventarit dhe parandalimin e problemeve.",
+    },
+  ];
   return (
     <div
       className="bg-gradient-to-br from-gray-900 via-gray-950 to-black text-white min-h-screen overflow-x-hidden"
@@ -199,13 +252,20 @@ const AIMSAlbanianLandingPage = () => {
             onClick={() => setMobileMenuOpen(false)}
             className="text-3xl font-bold hover:text-cyan-400 transition"
           >
-Kryefaqja          </a>
+            Kryefaqja{" "}
+          </a>
           <a
             href="#features"
             onClick={() => setMobileMenuOpen(false)}
             className="text-3xl font-bold hover:text-cyan-400 transition"
           >
             Veçoritë
+          </a>
+          <a
+            href="#how-it-works"
+            className="text-3xl font-bold hover:text-cyan-400 transition"
+          >
+            Si funksionon
           </a>
           <a
             href="#clients"
@@ -258,6 +318,13 @@ Kryefaqja          </a>
               Veçoritë
             </a>
             <a
+              href="#how-it-works"
+              className="hover:text-cyan-300 transition text-gray-200 font-medium"
+            >
+              Si funksionon
+            </a>
+
+            <a
               href="#clients"
               className="hover:text-cyan-300 transition text-gray-200 font-medium"
             >
@@ -270,18 +337,19 @@ Kryefaqja          </a>
               Kontakto
             </a>
           </div>
-          
+
           <div className="md:hidden">
-            {mobileMenuOpen ? <XIcon
-            onClick={() => setMobileMenuOpen(false)}
-            className="absolute top-6 right-6 w-10 h-10 text-cyan-400 cursor-pointer hover:rotate-90 transition"
-          />
-            :
-            <MenuIcon
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="w-8 h-8 text-cyan-400 cursor-pointer"
-            />
-          }
+            {mobileMenuOpen ? (
+              <XIcon
+                onClick={() => setMobileMenuOpen(false)}
+                className="absolute top-6 right-6 w-10 h-10 text-cyan-400 cursor-pointer hover:rotate-90 transition"
+              />
+            ) : (
+              <MenuIcon
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="w-8 h-8 text-cyan-400 cursor-pointer"
+              />
+            )}
           </div>
         </div>
       </nav>
@@ -301,10 +369,10 @@ Kryefaqja          </a>
             </p>
             <div className="flex space-x-4">
               <button className="bg-gradient-to-r from-cyan-600 to-blue-700 hover:from-cyan-700 hover:to-blue-800 px-7 py-4 rounded-full text-white font-bold transition transform hover:scale-105 shadow-2xl">
-                Eksploro Zgjidhjet
+                <a href="#features">Eksploro Zgjidhjet</a>
               </button>
               <button className="border-2 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 px-7 py-4 rounded-full font-bold transition transform hover:scale-105">
-                Shiko Demonstrimin
+                <a href="#contact">Shiko Demonstrimin</a>
               </button>
             </div>
           </div>
@@ -362,6 +430,67 @@ Kryefaqja          </a>
           ))}
         </div>
       </section>
+      <section
+        className="container mx-auto py-24 px-4"
+        ref={howItWorksRef}
+        id="how-it-works"
+      >
+        <h2 className="text-5xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
+          Si Funksionon
+        </h2>
+        <div className="grid md:grid-cols-4 gap-8">
+          {howItWorks.map((step, index) => (
+            <div
+              key={index}
+              className={`
+                relative step-card
+                transition-all duration-1000
+                ${
+                  visibleSteps.includes(index)
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-20"
+                }
+              `}
+              style={{
+                transitionDelay: `${index * 200}ms`,
+              }}
+            >
+              {/* Connector Line with Animation */}
+              {index < howItWorks.length - 1 && (
+                <div
+                  className={`
+                    hidden md:block absolute top-10 left-full h-0.5 z-0
+                    bg-gradient-to-r from-cyan-400 to-transparent
+                    transition-all duration-1000
+                    ${visibleSteps.includes(index) ? "w-full" : "w-0"}
+                  `}
+                  style={{
+                    transitionDelay: `${index * 200 + 500}ms`,
+                  }}
+                />
+              )}
+
+              {/* Step Card with Hover Animation */}
+              <div className="bg-gray-800/50 backdrop-blur-xl p-8 rounded-2xl transition-all duration-300 relative z-10 group hover:bg-gray-700/50">
+                {/* Animated Icon Container */}
+                <div className="flex items-center justify-center mb-6 transform transition-transform duration-300 group-hover:scale-110">
+                  {step.icon}
+                </div>
+
+                {/* Title with Color Animation */}
+                <h3 className="text-xl font-semibold mb-4 text-center text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 transition-all duration-300 group-hover:from-cyan-300 group-hover:to-blue-500">
+                  {step.title}
+                </h3>
+
+                {/* Description with Fade Animation */}
+                <p className="text-gray-300 text-center transition-colors duration-300 group-hover:text-white">
+                  {step.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
       <section className="container mx-auto py-24 px-4" id="clients">
         <h2 className="text-4xl font-bold text-center mb-16 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
           Çfarë Thonë Klientët
@@ -381,15 +510,12 @@ Kryefaqja          </a>
       </section>
       <section id="contact" className="container mx-auto py-24 px-4">
         <h2 className="text-4xl font-bold text-center mb-4 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
-          Investoni në Automatizimin që Kursen Kohë dhe Rrit Efikasitetin
+          Filloni Transformimin Digjital të Inventarit Tuaj
         </h2>
-        {/* Description */}
-        <p className="text-lg text-center text-gray-300 mb-12">
-          Zgjidhja jonë IoT inovative është krijuar për t'ju ndihmuar të
-          optimizoni proceset dhe të monitoroni pajisjet tuaja në mënyrë të
-          zgjuar dhe të sigurt. Plotësoni formularin më poshtë për të rezervuar
-          vendin tuaj dhe për të marrë më shumë informacione mbi zgjidhjen tonë
-          premium.
+        <p className="text-lg text-center text-gray-300 mb-12 max-w-[700px] text-center mx-auto">
+          Jini pjesë e revolucionit të menaxhimit të inventarit. Kontaktoni me
+          ne për të marrë një demonstrim falas dhe për të mësuar se si InvenTek
+          mund të transformojë biznesin tuaj.
         </p>
         <div className="max-w-4xl mx-auto bg-gray-800/50 backdrop-blur-xl rounded-3xl p-12">
           {/* Title */}
@@ -411,11 +537,10 @@ Kryefaqja          </a>
                     type="text"
                     id="name"
                     value={contactForm.name}
-                    onChange={(e) =>{
-                      setContactForm({ ...contactForm, name: e.target.value })
-                      setFormErrors({...formErrors,name:""})
-                    }
-                    }
+                    onChange={(e) => {
+                      setContactForm({ ...contactForm, name: e.target.value });
+                      setFormErrors({ ...formErrors, name: "" });
+                    }}
                     className={`
                 w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl
                 focus:outline-none focus:ring-2 focus:ring-cyan-400
@@ -443,11 +568,9 @@ Kryefaqja          </a>
                     id="email"
                     value={contactForm.email}
                     onChange={(e) => {
-                      setContactForm({ ...contactForm, email: e.target.value })
-                      setFormErrors({...formErrors,email:""})
-
-                    }
-                    }
+                      setContactForm({ ...contactForm, email: e.target.value });
+                      setFormErrors({ ...formErrors, email: "" });
+                    }}
                     className={`
                 w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl
                 focus:outline-none focus:ring-2 focus:ring-cyan-400
@@ -478,11 +601,9 @@ Kryefaqja          </a>
                   id="company"
                   value={contactForm.company}
                   onChange={(e) => {
-                    setContactForm({ ...contactForm, company: e.target.value })
-                    setFormErrors({...formErrors,company:""})
-
-                  }
-                  }
+                    setContactForm({ ...contactForm, company: e.target.value });
+                    setFormErrors({ ...formErrors, company: "" });
+                  }}
                   className="
               w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl
               focus:outline-none focus:ring-2 focus:ring-cyan-400
@@ -504,11 +625,9 @@ Kryefaqja          </a>
                   id="message"
                   value={contactForm.message}
                   onChange={(e) => {
-                    setContactForm({ ...contactForm, message: e.target.value })
-                    setFormErrors({...formErrors,message:""})
-
-                  }
-                  }
+                    setContactForm({ ...contactForm, message: e.target.value });
+                    setFormErrors({ ...formErrors, message: "" });
+                  }}
                   className={`
               w-full pl-10 pr-4 py-3 bg-gray-700/50 rounded-xl h-36
               focus:outline-none focus:ring-2 focus:ring-cyan-400
