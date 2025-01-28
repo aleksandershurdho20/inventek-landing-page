@@ -264,6 +264,8 @@ const AIMSAlbanianLandingPage = () => {
           <a
             href="#how-it-works"
             className="text-3xl font-bold hover:text-cyan-400 transition"
+            onClick={() => setMobileMenuOpen(false)}
+
           >
             Si funksionon
           </a>
